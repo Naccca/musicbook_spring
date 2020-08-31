@@ -25,14 +25,17 @@
 					<tr>
 						<td><label>Username:</label></td>
 						<td><form:input path="username"/></td>
+						<td><form:errors path="username" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><label>Name:</label></td>
 						<td><form:input path="name"/></td>
+						<td><form:errors path="name" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><label>Password:</label></td>
 						<td><form:input path="password_hash"/></td>
+						<td><form:errors path="password_hash" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><label>Bio:</label></td>

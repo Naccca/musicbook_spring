@@ -2,10 +2,16 @@ package com.musicbook.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,10 +56,15 @@ public class ArtistsController {
 	}
 	
 	@PostMapping("/saveArtist")
-	public String saveArtist(@ModelAttribute("artist") Artist theArtist) {
+	public String saveArtist(@Valid @ModelAttribute("artist") Artist theArtist, BindingResult theBindingResult) {
 		
-		artistService.saveArtist(theArtist);
-		return "redirect:/artists";
+		if (theBindingResult.hasErrors()) {
+			return "artists/form";
+		}
+		else {
+			artistService.saveArtist(theArtist);
+			return "redirect:/artists";
+		}
 	}
 	
 	@GetMapping("/edit")
@@ -72,5 +83,13 @@ public class ArtistsController {
 		artistService.deleteArtist(theArtist.getId());
 		
 		return "redirect:/artists";
+	}
+	
+	@InitBinder
+	public void initBinder(WebDataBinder dataBinder) {
+		
+		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+		
+		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
 }
